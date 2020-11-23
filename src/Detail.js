@@ -3,19 +3,16 @@ import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import './Detail.scss';
 import { stockContext } from './App.js';
-
-let box = styled.div`
-  padding: 20px;
-`;
-
-let box2 = styled.h4`
-  font-size: 25px;
-`;
+import { Nav } from 'react-bootstrap';
+import { CSSTransition } from 'react-transition-group';
 
 function Detail(props) {
   
   let [alert, setAlert] = useState(true);
   let [inputVal, setInputVal] = useState('');
+
+  let [tab, setTab] = useState(0);
+  let [tabswitch, setTabswitch] = useState(false);
 
   useEffect(()=>{ 
     let timer = setTimeout(()=>{
@@ -63,8 +60,37 @@ function Detail(props) {
           }}>뒤로가기</button>
         </div>
       </div>
+
+      <Nav className="mt-5" variant="tabs" defaultActiveKey="link-0">
+        <Nav.Item>
+          <Nav.Link eventKey="link-0" onClick={()=>{ setTab(0); setTabswitch(false) }}>Active</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link-1" onClick={()=>{ setTab(1); setTabswitch(false) }}>Option 2</Nav.Link>
+        </Nav.Item>
+      </Nav>
+      
+      <CSSTransition in={tabswitch} classNames="wow" timeout={500}>
+        <TabContent tab={tab} setTabswitch={setTabswitch}></TabContent>
+      </CSSTransition>
+
     </div>
   );
+}
+
+function TabContent(props) {
+
+  useEffect(()=>{
+    props.setTabswitch(true);
+  });
+
+  if(props.tab === 0) {
+    return <div>0번째 내용</div>
+  } else if(props.tab === 1){
+    return <div>1번째 내용</div>
+  } else if(props.tab === 2){
+    return <div>2번째 내용</div>
+  }
 }
 
 function AlertBox() {
